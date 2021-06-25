@@ -1,0 +1,89 @@
+﻿@model DeliveryClient.Models.DeliveryBooking
+  
+
+@{
+    ViewData["Title"] = "CreateBooking";
+    var userdata = ViewBag.Message;
+    var exec = ViewBag.executives;
+}
+
+<h1>CreateBooking</h1>
+
+<h4>DeliveryBooking</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateBooking">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-group">
+            <label asp-for="BookingId" class="control-label"></label>
+            <input asp-for="BookingId" class="form-control" />
+            <span asp-validation-for="BookingId" class="text-danger"></span>
+        </div>*@
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" value="@userdata.UserId"/>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input readonly asp-for="UserName" class="form-control" value="@userdata.UserName"/>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateAndTime" class="control-label"></label>
+                <input asp-for="DateAndTime" class="form-control" />
+                <span asp-validation-for="DateAndTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Weight" class="control-label"></label>
+                <input asp-for="Weight" class="form-control" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" value="@userdata.Address"/>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" value="@userdata.City"/>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeliveryExecutive" class="control-label"></label>
+                @*<input asp-for="DeliveryExecutive" class="form-control" />*@
+                <select asp-for="DeliveryExecutive" class="form-control" asp-items="@exec"></select>
+                @*@Html.DropDownList("UserName",
+        (IEnumerable<SelectListItem>)ViewBag.Cities,
+        "Select UserName")*@
+                @*@Html.DropDownList("UserName", @executive as IEnumerable<SelectListItem>, "Select")*@
+                @*Html.DropDownList("UserName",ViewBag.Cities as IEnumerable<SelectListItem>,"Select")*@
+                @*@Html.DropDownListFor(model => model.UserName, (SelectList)executive, "---Select a value---", new { htmlAttributes = new { @class = "form-control" } })*@
+                @*@Html.DropDownListFor(model => model.UserName, new SelectList(ViewBag.executive, "UserName", "UserName"), new { @class = "form-control" })*@
+                <span asp-validation-for="DeliveryExecutive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingStatus" class="control-label"></label>
+                <input asp-for="BookingStatus" class="form-control"/>
+                <span asp-validation-for="BookingStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control"/>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
