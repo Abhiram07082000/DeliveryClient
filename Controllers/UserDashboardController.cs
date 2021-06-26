@@ -11,15 +11,7 @@ namespace DeliveryClient.Controllers
     {
         public IActionResult Index()
         {
-            string msg = HttpContext.Session.GetString("userName");
-            if (msg != null)
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Login", "Login");
-            }
+            return View();
             
         }
     }

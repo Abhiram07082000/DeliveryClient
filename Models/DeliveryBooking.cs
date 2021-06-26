@@ -12,7 +12,7 @@ namespace DeliveryClient.Models
         [Key]
         public int BookingId { get; set; }
         public int UserId { get; set; }
-        public User UserName { get; set; }
+        public string UserName { get; set; }
         public DateTime DateAndTime { get; set; }
         public float Weight { get; set; }
         public string Address { get; set; }

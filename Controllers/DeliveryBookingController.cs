@@ -20,7 +20,7 @@ namespace DeliveryClient.Controllers
         public async Task<IActionResult> GetAllBookings()
         {
             List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
-            
+
 
             using (var client = new HttpClient())
             {
@@ -36,12 +36,12 @@ namespace DeliveryClient.Controllers
                     BookingInfo = JsonConvert.DeserializeObject<List<DeliveryBooking>>(ProductResponse);
 
                 }
-                
+
                 return View(BookingInfo);
             }
         }
 
-        public async Task<IActionResult> ListByUser(string usname)
+        public async Task<IActionResult> ListByUser()
         {
             //List<User> User = new List<User>();
             List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
@@ -65,18 +65,42 @@ namespace DeliveryClient.Controllers
                     var UserRes = Response.Content.ReadAsStringAsync().Result;
                     BookingInfo = JsonConvert.DeserializeObject<List<DeliveryBooking>>(UserRes);
                 }
-                object Username = HttpContext.Session.GetString("username");
-                UserBookings = (from s in BookingInfo
-                                where s.UserName == Username
-                                select s).ToList();
-                           
+                string Username = HttpContext.Session.GetString("username");
+                foreach (var i in BookingInfo)
+                {
+                    int res = String.Compare(i.UserName, Username);
+                    if (res == 0)
+                    {
+                        UserBookings.Add(i);
+                    }
+                }
+
+
                 return View(UserBookings);
             }
         }
 
+        [HttpGet]
+            public async Task<IActionResult> StatusCheck(int id)
+            {
+                //TempData["BookingId"] = id;
+                DeliveryBooking p = new DeliveryBooking();
+                
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.GetAsync("https://localhost:44372/api/DeliveryBookings/" + id))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        p = JsonConvert.DeserializeObject<DeliveryBooking>(apiResponse);
+                    }
+                }
+                return View(p);
+            }
+
 
         public async Task<IActionResult> GetById(string name)
         {
+            string usname = HttpContext.Session.GetString("username");
             //List<User> User = new List<User>();
             List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
             List<DeliveryBooking> DelList = new List<DeliveryBooking>();
@@ -101,7 +125,7 @@ namespace DeliveryClient.Controllers
                 }
 
                 DelList = (from s in BookingInfo
-                                where s.DeliveryExecutive == name
+                                where s.DeliveryExecutive == usname
                                 select s).ToList();
 
                 return View(DelList);
@@ -131,6 +155,7 @@ namespace DeliveryClient.Controllers
                 var createobj = (from k in UserList
                                  where k.UserName == Username
                                  select k).FirstOrDefault();
+                
 
                 if (createobj != null)
                 {
@@ -169,9 +194,16 @@ namespace DeliveryClient.Controllers
                    return RedirectToAction("ListByUser");
             }
 
+           
+
+            //[HttpPost]
+            //public async Task<IActionResult> PriceCalc(float wt)
+            //{
+            //    return await View();
+            //}
             public async Task<IActionResult> EditBooking(int id)
             {
-            DeliveryBooking p = new DeliveryBooking();
+                DeliveryBooking p = new DeliveryBooking();
                 using (var httpClient = new HttpClient())
                 {
                     using (var response = await httpClient.GetAsync("https://localhost:44372/api/DeliveryBookings/" + id))
@@ -199,7 +231,7 @@ namespace DeliveryClient.Controllers
                         p1 = JsonConvert.DeserializeObject<DeliveryBooking>(apiResponse);
                     }
                 }
-                return RedirectToAction("GetAllBookings");
+                return RedirectToAction("GetById");
             }
 
             [HttpGet]

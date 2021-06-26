@@ -1,43 +1,43 @@
 ﻿@model DeliveryClient.Models.Login
     Inherits="System.Web.Mvc.ViewPage<IEnumerable><DeliveryClient.Models.Login></IEnumerable>
-        @{
-            ViewData["Title"] = "Login";
-        }
+@{
+    ViewData["Title"] = "Login";
+}
+@Html.Partial("_NavBar");
+<h1>Login</h1>
 
-        <h1>Login</h1>
-
-        <h4>Login</h4>
-        <hr />
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Login">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="userName" class="control-label"></label>
-                        <input asp-for="userName" class="form-control" />
-                        <span asp-validation-for="userName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="pass" class="control-label"></label>
-                        <input asp-for="pass" class="form-control" />
-                        <span asp-validation-for="pass" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="type" class="control-label"></label>
-                        <input asp-for="type" class="form-control" />
-                        <span asp-validation-for="type" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
-                    </div>
-                </form>
+<h4>Login</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="userName" class="control-label"></label>
+                <input asp-for="userName" class="form-control" />
+                <span asp-validation-for="userName" class="text-danger"></span>
             </div>
-        </div>
+            <div class="form-group">
+                <label asp-for="pass" class="control-label"></label>
+                <input asp-for="pass" class="form-control" />
+                <span asp-validation-for="pass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="type" class="control-label"></label>
+                <input asp-for="type" class="form-control" />
+                <span asp-validation-for="type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
 
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
-        @section Scripts {
-            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        }
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

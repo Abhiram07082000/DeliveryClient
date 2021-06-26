@@ -62,8 +62,31 @@ namespace DeliveryClient.Controllers
                 return RedirectToAction("GetAllUsers");
             }
 
-            public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> ViewDetails(int i)
+        {
+            string Username = HttpContext.Session.GetString("username");
+            List<User> UserInfo = new List<User>();
+
+            using (var client = new HttpClient())
             {
+
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage Res = await client.GetAsync("api/Users");
+
+                if (Res.IsSuccessStatusCode)
+                {
+                    var UserResponse = Res.Content.ReadAsStringAsync().Result;
+                    UserInfo = JsonConvert.DeserializeObject<List<User>>(UserResponse);
+
+                }
+                int id = (from k in UserInfo
+                          where k.UserName == Username
+                          select k.UserId).FirstOrDefault();
+
+
+
                 User p = new User();
                 using (var httpClient = new HttpClient())
                 {
@@ -74,7 +97,44 @@ namespace DeliveryClient.Controllers
                     }
                 }
                 return View(p);
+            }
+        }
+        public async Task<IActionResult> Edit(int i)
+            {
+                string Username = HttpContext.Session.GetString("username");
+                List<User> UserInfo = new List<User>();
 
+            using (var client = new HttpClient())
+            {
+
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage Res = await client.GetAsync("api/Users");
+
+                if (Res.IsSuccessStatusCode)
+                {
+                    var UserResponse = Res.Content.ReadAsStringAsync().Result;
+                    UserInfo = JsonConvert.DeserializeObject<List<User>>(UserResponse);
+
+                }
+                int id = (from k in UserInfo
+                          where k.UserName == Username
+                          select k.UserId).FirstOrDefault();
+
+
+
+                User p = new User();
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.GetAsync("https://localhost:44372/api/Users/" + id))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        p = JsonConvert.DeserializeObject<User>(apiResponse);
+                    }
+                }
+                return View(p);
+            }
             }
 
             [HttpPost]
@@ -92,7 +152,7 @@ namespace DeliveryClient.Controllers
                         p1 = JsonConvert.DeserializeObject<User>(apiResponse);
                     }
                 }
-                return RedirectToAction("GetAllUsers");
+                return RedirectToAction("ViewDetails");
             }
 
             [HttpGet]

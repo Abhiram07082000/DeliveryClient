@@ -85,9 +85,9 @@ namespace DeliveryClient.Controllers
                 
 
                 
-                //DeliveryBooking BookingInf = (from k in BookingInfo
-                //                              where k.DeliveryExecutive == l.userName
-                //                              select k).FirstOrDefault();
+                DeliveryBooking BookingInf = (from k in BookingInfo
+                                              where k.UserName == l.userName
+                                              select k).LastOrDefault();
 
                 //var filtered = (from s in BookingInfo
                 //                           where s.DeliveryExecutive == l.userName
@@ -104,18 +104,19 @@ namespace DeliveryClient.Controllers
                 {
                     if (l.type == "Customer")
                     {
+                        //int bookingid = BookingInf.BookingId;
                         String Username = UserInfo.UserName;
                         HttpContext.Session.SetString("username", Username);
                         return RedirectToAction("CreateBooking", "DeliveryBooking");
-                        
+                        //return RedirectToAction("StatusCheck", "DeliveryBooking",new {id= bookingid});
                     }
                     else if (l.type == "Delivery Executive")
                     { 
                         
                         String Username = UserInfo.UserName;
                         HttpContext.Session.SetString("username", Username);
-                        var result = new DeliveryBookingController().GetById(Username);
-                        return RedirectToAction("GetById","DeliveryBooking",new {name=Username });
+                        //var result = new DeliveryBookingController().GetById(Username);  ,new {name=Username }
+                        return RedirectToAction("GetById","DeliveryBooking");
                         
                     }
                     else
