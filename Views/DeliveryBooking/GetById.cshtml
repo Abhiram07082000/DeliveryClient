@@ -5,15 +5,31 @@
 @{
     ViewData["Title"] = "GetById";
 }
-@Html.Partial("_ExecutiveNavBar");
-<h1>GetById</h1>
+@Html.Partial("_ExecutiveNavBar")
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
+<h1 style="text-align:center">Booking Details</h1>
+
+<style>
+    col-color-1 {
+        background-color: gainsboro;
+        color: blue;
+    }
+
+    .col-color-2 {
+        background-color: firebrick;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: darkgrey;
+    }
+</style>
+
+
+
+<table class="table" border="1">
+    <thead border="1">
+        <tr class="col-color-2">
             <th>
                 @Html.DisplayNameFor(model => model.BookingId)
             </th>
@@ -48,7 +64,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td style="background-color:gainsboro">
                     @Html.DisplayFor(modelItem => item.BookingId)
                 </td>
                 <td>

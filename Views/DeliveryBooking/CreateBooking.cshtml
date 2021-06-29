@@ -2,93 +2,131 @@
 
 
 @{
-    ViewData["Title"] = "CreateBooking";
+    ViewData["Title"] = "Create Booking";
     var userdata = ViewBag.Message;
     var exec = ViewBag.executives;
 
 
 }
 
+
 @Html.Partial("_LoggedInNavBar");
 
-<h1>CreateBooking</h1>
-<h4>DeliveryBooking</h4>
-<hr />
+<style>
+
+    .body {
+        align-content: center;
+        animation: alternate;
+        align-items: center;
+    }
+
+    .row-margin-30 {
+        margin-top: 4.0em;
+    }
+
+    .row-margin-20 {
+        margin-top: 2.0em;
+    }
+
+    .box {
+        background-color: aquamarine;
+        position: absolute;
+        top: 120px;
+        right: 400px;
+        bottom: 120px;
+        left: 400px;
+    }
+</style>
+
+<h1  style="text-align:center">Create a new Booking</h1>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateBooking">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*<div class="form-group">
-                    <label asp-for="BookingId" class="control-label"></label>
-                    <input asp-for="BookingId" class="form-control" />
-                    <span asp-validation-for="BookingId" class="text-danger"></span>
-                </div>*@
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <input readonly asp-for="UserId" class="form-control" value="@userdata.UserId" />
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input readonly asp-for="UserName" class="form-control" value="@userdata.UserName" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateAndTime" class="control-label"></label>
-                <input asp-for="DateAndTime" class="form-control" />
-                <span asp-validation-for="DateAndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Weight" class="control-label"></label>
-                <input asp-for="Weight" class="form-control" />
-                <span asp-validation-for="Weight" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" value="@userdata.Address" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input readonly asp-for="City" class="form-control" value="@userdata.City" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeliveryExecutive" class="control-label"></label>
-                @*<input asp-for="DeliveryExecutive" class="form-control" />*@
-                <select asp-for="DeliveryExecutive" class="form-control" asp-items="@exec"></select>
-                @*@Html.DropDownList("UserName",
-                    (IEnumerable<SelectListItem>)ViewBag.Cities,
-                    "Select UserName")*@
-                @*@Html.DropDownList("UserName", @executive as IEnumerable<SelectListItem>, "Select")*@
-                @*Html.DropDownList("UserName",ViewBag.Cities as IEnumerable<SelectListItem>,"Select")*@
-                @*@Html.DropDownListFor(model => model.UserName, (SelectList)executive, "---Select a value---", new { htmlAttributes = new { @class = "form-control" } })*@
-                @*@Html.DropDownListFor(model => model.UserName, new SelectList(ViewBag.executive, "UserName", "UserName"), new { @class = "form-control" })*@
-                <span asp-validation-for="DeliveryExecutive" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BookingStatus" type="hidden" class="control-label"></label>
-                <input hidden asp-for="BookingStatus" class="form-control" value="Waiting for Executive Confirmation" />
-                <span asp-validation-for="BookingStatus" type="hidden" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
+    <div class="col-md-4" style="width:fit-content">
+    </div>
+    
+    <div class="col-md-3">
+        <div class="row row-margin-30">
+            <div class="col-md-auto align-items-center" >
+                <form asp-action="CreateBooking">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="UserId" class="control-label"></label>
+                        <input readonly asp-for="UserId" class="form-control" value="@userdata.UserId" />
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserName" class="control-label"></label>
+                        <input readonly asp-for="UserName" class="form-control" value="@userdata.UserName" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DateAndTime" class="control-label"></label>
+                        <input asp-for="DateAndTime" class="form-control" required />
+                        <span asp-validation-for="DateAndTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Weight" class="control-label"></label>
+                        <input asp-for="Weight" id="input" name="weight" class="form-control" required />
+                        <span asp-validation-for="Weight" class="text-danger"></span>
 
-                <input hidden type="text" asp-for="Price" name="output" id="output" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
+                        @*JavaScript for Automatic Calculation of weight*@
+                        <script>
+                            function multiplyBy() {
+                                var weight = document.getElementsByName('weight')[0].value;
+                                var out = 30 * parseFloat(weight);
+                                document.getElementsByName('price')[0].value = out;
+                            }
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value="Calculate Price" onClick="multiplyBy()" class="btn btn-primary" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input readonly type="text" asp-for="Price" color="black" name="price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input readonly asp-for="Address" class="form-control" value="@userdata.Address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="City" class="control-label"></label>
+                        <input readonly asp-for="City" class="form-control" value="@userdata.City" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DeliveryExecutive" class="control-label"></label>
+                        <select asp-for="DeliveryExecutive" class="form-control" asp-items="@exec"></select>
+                        <span asp-validation-for="DeliveryExecutive" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label hidden asp-for="BookingStatus" type="hidden" class="control-label"></label>
+                        <input hidden asp-for="BookingStatus" class="form-control" value="Waiting for Executive Confirmation" />
+                        <span hidden asp-validation-for="BookingStatus" type="hidden" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+    </div>
+   
+    <div class="col-md-3">
     </div>
 </div>
+        
+        
+        <div>
+            @ViewBag.exception
+        </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        <div>
+            <a asp-action="Login" asp-controller="Login">Back to List</a>
+        </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}}
+

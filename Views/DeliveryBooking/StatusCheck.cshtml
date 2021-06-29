@@ -4,8 +4,24 @@
     ViewData["Title"] = "StatusCheck";
 }
 
-@Html.Partial("_LoggedInNavBar");
+@Html.Partial("_LoggedInNavBar")
+
+@{
+    if (@ViewBag.errormsg != null)
+    {
+        <script type="text/javascript">
+
+                window.onload = function ()
+                {
+                    alert("@ViewBag.errormsg")
+                };
+        </script>
+    }
+}
 <h1>StatusCheck</h1>
+
+
+
 
 <div>
     <h4>DeliveryBooking</h4>
@@ -17,12 +33,12 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.BookingId)
         </dd>
-        <dt class="col-sm-2">
+        @*<dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UserId)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UserId)
-        </dd>
+        </dd>*@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UserName)
         </dt>
@@ -72,8 +88,9 @@
             @Html.DisplayFor(model => model.Price)
         </dd>
     </dl>
+
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+ 
+    <a asp-action="StatusCheck" asp-controller="StatusCheck">Back</a>
 </div>

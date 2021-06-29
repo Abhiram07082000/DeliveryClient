@@ -2,8 +2,28 @@
 
 @{
     ViewData["Title"] = "Edit";
+    @using Microsoft.AspNetCore.Http
+    @inject IHttpContextAccessor HttpContextAccessor
 }
-@Html.Partial("_NavBar");
+
+@{
+    ViewBag.Data = HttpContextAccessor.HttpContext.Session.GetString("usertype");
+}
+
+@if (ViewBag.Data == "Customer")
+{
+    @Html.Partial("_LoggedInNavBar")
+}
+
+@if (ViewBag.Data == "Delivery Executive")
+{
+    @Html.Partial("_ExecutiveNavBar")
+}
+@if (ViewBag.Data == "Admin")
+{
+    @Html.Partial("_AdminNavBar")
+}
+
 <h1>Edit</h1>
 
 <h4>User</h4>
@@ -14,7 +34,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
+                <input readonly asp-for="UserId" class="form-control" />
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -54,7 +74,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserType" class="control-label"></label>
-                <input asp-for="UserType" class="form-control" />
+                <input readonly asp-for="UserType" class="form-control" />
                 <span asp-validation-for="UserType" class="text-danger"></span>
             </div>
             <div class="form-group">

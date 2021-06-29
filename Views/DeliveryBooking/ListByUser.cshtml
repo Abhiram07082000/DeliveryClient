@@ -1,22 +1,32 @@
 ﻿@model IEnumerable<DeliveryClient.Models.DeliveryBooking>
 
 @{
-    ViewData["Title"] = "ListByUser";
+    ViewData["Title"] = "List of My Orders";
 
 }
-@Html.Partial("_LoggedInNavBar");
-<h1>ListByUser</h1>
+@Html.Partial("_LoggedInNavBar")
 
-<a href="StatusCheck">
-    <input type="button" value="Check Status" class="btn btn-primary" />
-</a>
-@Html.DisplayNameFor(model => model.UserId)
+<h1 style="text-align:center">List of My Orders</h1>
+<style>
+    col-color-1 {
+        background-color: gainsboro;
+        color:blue;
+    }
+    .col-color-2 {
+        background-color:firebrick;
+        color:white;
+    }
+    tr:hover{
+        background-color:darkgrey;
+    }
+    
+</style>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateBooking">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
+<table class="table" border="1">
+    <thead border="1">
+        <tr class="col-color-2">
             <th>
                 @Html.DisplayNameFor(model => model.BookingId)
             </th>
@@ -44,14 +54,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.Price)
             </th>
-            <th></th>
+            
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td style="background-color:gainsboro">
                     @Html.DisplayFor(modelItem => item.BookingId)
                 </td>
                 <td>
@@ -78,11 +88,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
+                
             </tr>
         }
     </tbody>

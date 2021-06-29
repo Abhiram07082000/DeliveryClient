@@ -3,22 +3,38 @@
 @{
     ViewData["Title"] = "GetAllBookings";
 }
+@Html.Partial("_AdminNavBar")
 
-<h1>GetAllBookings</h1>
+<style>
+    col-color-1 {
+        background-color: gainsboro;
+        color: blue;
+    }
+
+    .col-color-2 {
+        background-color: firebrick;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: darkgrey;
+    }
+</style>
+<h1 style="text-align:center">List of All Bookings</h1>
 
 <p>
     <a asp-action="CreateBooking">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
+<table class="table" border="1">
+    <thead border="1">
+        <tr class="col-color-2">
             <th>
                 @Html.DisplayNameFor(model => model.BookingId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
-            
+
             <th>
                 @Html.DisplayNameFor(model => model.DateAndTime)
             </th>
@@ -44,41 +60,57 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookingId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateAndTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Weight)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeliveryExecutive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookingStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.ActionLink("EditBooking", "Edit", new { id=item.BookingId}) |
-                @Html.ActionLink("Create", "Create", new { /*id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "DeleteBooking", new { id=item.BookingId})
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="background-color:gainsboro">
+                    @Html.DisplayFor(modelItem => item.BookingId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateAndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryExecutive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookingStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditBooking", new { id = item.BookingId }) |
+                   
+                    @Html.ActionLink("Delete", "DeleteBooking", new { id = item.BookingId })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+@*<div class="form-group">
+    <label for="">Weight (b): </label><input type="textbox" asp-for="Weight" name="weight"></input><br>
+    <button onClick="calculateArea()">Calculate area</button><br>
+    <label asp-for="Price">Price</label><input type="textbox" asp-for="Price" name="price"></input>
+    <script>
+                            function calculateArea() {
+                                var base = document.getElementsByName('weight')[0].value;
+                                var out = 2 * parseFloat(base);
+                                document.getElementsByName('price')[0].value = out;
+
+                            }
+    </script>
+</div>*@

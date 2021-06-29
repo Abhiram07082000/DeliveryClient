@@ -4,7 +4,15 @@
 
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+
 *@
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Data = HttpContextAccessor.HttpContext.Session.GetString("username");
+}
+
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
@@ -18,22 +26,20 @@
             <ul class="navbar-nav flex-grow-1">
 
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="CreateBooking">New Booking Request</a>
+                    <a class="nav-link text-dark" asp-action="CreateBooking" asp-controller="DeliveryBooking">New Booking Request</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="ListByUser">View Booking History</a>
+                    <a class="nav-link text-dark" asp-action="ListByUser" asp-controller="DeliveryBooking">View Booking History</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href=@Url.Action("StatusCheck", "StatusCheck")>View Status</a>
+                    <a class="nav-link text-dark" asp-action="StatusCheck" asp-controller="StatusCheck">View Status</a>
 
                 </li>
-                
-                @*<li class="nav-item">
-                    <input type="submit" value="Status" class="btn btn-primary" onclick="location.href='@Url.Action("StatusCheck", "StatusCheck")'" />
-                </li>*@
-                
                 <li class="nav-item">
                     <a class="nav-link text-dark" href=@Url.Action("Edit","User")>Edit My Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href=@Url.Action("Logout", "Login")>Logout</a>
                 </li>
             </ul>
         </div>

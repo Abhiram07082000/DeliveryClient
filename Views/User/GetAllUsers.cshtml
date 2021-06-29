@@ -3,16 +3,31 @@
 @{
     ViewData["Title"] = "GetAllUsers";
 }
+@Html.Partial("_AdminNavBar");
+<h1>List of All Users</h1>
+<style>
+    col-color-1 {
+        background-color: gainsboro;
+        color: blue;
+    }
 
-<h1>GetAllUsers</h1>
+    .col-color-2 {
+        background-color: firebrick;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: darkgrey;
+    }
+</style>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="AdminCreate">Create New</a>
 </p>
-<table class="table">
+<table class="table" border="1">
     <thead>
-        <tr>
-            <th>
+        <tr class="col-color-2">
+            <th >
                 @Html.DisplayNameFor(model => model.UserId)
             </th>
             <th>
@@ -43,41 +58,42 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Age)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserType)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.UserId }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.UserId })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="background-color:gainsboro">
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserType)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "AdminEdit", new { id = item.UserId }) |
+                   
+                    @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

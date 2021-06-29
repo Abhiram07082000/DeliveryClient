@@ -1,4 +1,5 @@
 ﻿using DeliveryClient.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,165 +18,232 @@ namespace DeliveryClient.Controllers
     {
         // GET: DeliveryBookingController
         string Baseurl = "https://localhost:44372/";
+
+        //Get all the Bookings of Users
         public async Task<IActionResult> GetAllBookings()
         {
-            List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
-
-
-            using (var client = new HttpClient())
+            try
             {
-
-                client.BaseAddress = new Uri(Baseurl);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.GetAsync("api/DeliveryBookings");
-
-                if (Res.IsSuccessStatusCode)
+                List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
+                using (var client = new HttpClient())
                 {
-                    var ProductResponse = Res.Content.ReadAsStringAsync().Result;
-                    BookingInfo = JsonConvert.DeserializeObject<List<DeliveryBooking>>(ProductResponse);
-
-                }
-
-                return View(BookingInfo);
-            }
-        }
-
-        public async Task<IActionResult> ListByUser()
-        {
-            //List<User> User = new List<User>();
-            List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
-            List<DeliveryBooking> UserBookings = new List<DeliveryBooking>();
-
-            using (var client = new HttpClient())
-            {
-                string Baseurl = "https://localhost:44372/";
-                client.BaseAddress = new Uri(Baseurl);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                //HttpResponseMessage Res = await client.GetAsync("api/Users");
-                HttpResponseMessage Response = await client.GetAsync("api/DeliveryBookings");
-                //if (Res.IsSuccessStatusCode)
-                //{
-                //    var UserResponse = Res.Content.ReadAsStringAsync().Result;
-                //    User = JsonConvert.DeserializeObject<List<User>>(UserResponse);
-                //}
-                if (Response.IsSuccessStatusCode)
-                {
-                    var UserRes = Response.Content.ReadAsStringAsync().Result;
-                    BookingInfo = JsonConvert.DeserializeObject<List<DeliveryBooking>>(UserRes);
-                }
-                string Username = HttpContext.Session.GetString("username");
-                foreach (var i in BookingInfo)
-                {
-                    int res = String.Compare(i.UserName, Username);
-                    if (res == 0)
+                    client.BaseAddress = new Uri(Baseurl);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage Res = await client.GetAsync("api/DeliveryBookings");
+                    if (Res.IsSuccessStatusCode)
                     {
-                        UserBookings.Add(i);
+                        var ProductResponse = Res.Content.ReadAsStringAsync().Result;
+                        BookingInfo = JsonConvert.DeserializeObject<List<DeliveryBooking>>(ProductResponse);
                     }
                 }
-
-
-                return View(UserBookings);
+                return View(BookingInfo);
+            }
+            catch(Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
             }
         }
 
+        //Get all the Bookings of a Particular User by UserName
+        public async Task<IActionResult> ListByUser()
+        {
+            try
+            {
+
+
+                List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
+                List<DeliveryBooking> UserBookings = new List<DeliveryBooking>();
+                using (var client = new HttpClient())
+                {
+                    string Baseurl = "https://localhost:44372/";
+                    client.BaseAddress = new Uri(Baseurl);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage Response = await client.GetAsync("api/DeliveryBookings");
+                    if (Response.IsSuccessStatusCode)
+                    {
+                        var UserRes = Response.Content.ReadAsStringAsync().Result;
+                        BookingInfo = JsonConvert.DeserializeObject<List<DeliveryBooking>>(UserRes);
+                    }
+                    string Username = HttpContext.Session.GetString("username");
+                    foreach (var i in BookingInfo)
+                    {
+                        int res = String.Compare(i.UserName, Username);
+                        if (res == 0)
+                        {
+                            UserBookings.Add(i);
+                        }
+                    }
+                    return View(UserBookings);
+                }
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
+            }
+
+         }
+     
+
+
+        //Check the status of a particular booking by Booking Id
         [HttpGet]
             public async Task<IActionResult> StatusCheck(int id)
             {
-                //TempData["BookingId"] = id;
-                DeliveryBooking p = new DeliveryBooking();
-                
-                using (var httpClient = new HttpClient())
+                try
                 {
-                    using (var response = await httpClient.GetAsync("https://localhost:44372/api/DeliveryBookings/" + id))
+                    string usname = HttpContext.Session.GetString("username");
+                    DeliveryBooking p = new DeliveryBooking();
+                    List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
+                    List<DeliveryBooking> DelList = new List<DeliveryBooking>();
+                    using (var client = new HttpClient())
                     {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        p = JsonConvert.DeserializeObject<DeliveryBooking>(apiResponse);
+                        string Baseurl = "https://localhost:44372/";
+                        client.BaseAddress = new Uri(Baseurl);
+                        client.DefaultRequestHeaders.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        HttpResponseMessage Response = await client.GetAsync("api/DeliveryBookings");
+                        if (Response.IsSuccessStatusCode)
+                        {
+                            var UserRes = Response.Content.ReadAsStringAsync().Result;
+                            BookingInfo = JsonConvert.DeserializeObject<List<DeliveryBooking>>(UserRes);
+                        }
+                    }
+
+                    DelList = (from k in BookingInfo
+                               where k.BookingId == id && k.UserName == usname
+                               select k).ToList();
+
+                    if (DelList.Count() != 0)
+                    {
+                        using (var httpClient = new HttpClient())
+                        {
+                            using (var response = await httpClient.GetAsync("https://localhost:44372/api/DeliveryBookings/" + id))
+                            {
+                                string apiResponse = await response.Content.ReadAsStringAsync();
+                                p = JsonConvert.DeserializeObject<DeliveryBooking>(apiResponse);
+                            }
+                        }
+                        return View(p);
+                    }
+                    else
+                    {
+                        ViewBag.errormsg = "Invalid Booking Id";
+                        return View();
                     }
                 }
-                return View(p);
+            catch(Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
+            }
+                                            
             }
 
 
+        //Get the details of Bookings received by a particular Delivery Executive
         public async Task<IActionResult> GetById(string name)
         {
-            string usname = HttpContext.Session.GetString("username");
-            //List<User> User = new List<User>();
-            List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
-            List<DeliveryBooking> DelList = new List<DeliveryBooking>();
-           
-            using (var client = new HttpClient())
+            try
             {
-                string Baseurl = "https://localhost:44372/";
-                client.BaseAddress = new Uri(Baseurl);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                //HttpResponseMessage Res = await client.GetAsync("api/Users");
-                HttpResponseMessage Response = await client.GetAsync("api/DeliveryBookings");
-                //if (Res.IsSuccessStatusCode)
-                //{
-                //    var UserResponse = Res.Content.ReadAsStringAsync().Result;
-                //    User = JsonConvert.DeserializeObject<List<User>>(UserResponse);
-                //}
-                if (Response.IsSuccessStatusCode)
+
+
+                string usname = HttpContext.Session.GetString("username");
+                List<DeliveryBooking> BookingInfo = new List<DeliveryBooking>();
+                List<DeliveryBooking> DelList = new List<DeliveryBooking>();
+                using (var client = new HttpClient())
                 {
-                    var UserRes = Response.Content.ReadAsStringAsync().Result;
-                    BookingInfo = JsonConvert.DeserializeObject<List<DeliveryBooking>>(UserRes);
+                    string Baseurl = "https://localhost:44372/";
+                    client.BaseAddress = new Uri(Baseurl);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage Response = await client.GetAsync("api/DeliveryBookings");
+                    if (Response.IsSuccessStatusCode)
+                    {
+                        var UserRes = Response.Content.ReadAsStringAsync().Result;
+                        BookingInfo = JsonConvert.DeserializeObject<List<DeliveryBooking>>(UserRes);
+                    }
+
+                    //Get the list of executives, compare it with username entered during login and store the appropriate data in a list
+                    DelList = (from s in BookingInfo
+                               where s.DeliveryExecutive == usname
+                               select s).ToList();
+
+                    return View(DelList);
                 }
-
-                DelList = (from s in BookingInfo
-                                where s.DeliveryExecutive == usname
-                                select s).ToList();
-
-                return View(DelList);
+            }
+            catch(Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
             }
         }
 
-         public async Task<IActionResult> CreateBooking()
-            {
-            List<User> UserList = new List<User>();
-            using (var client = new HttpClient())
+        //Create a Booking
+        public async Task<IActionResult> CreateBooking()
+        {
+            try
             {
 
-                client.BaseAddress = new Uri(Baseurl);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage Res = await client.GetAsync("api/Users");
 
-                if (Res.IsSuccessStatusCode)
+                List<User> UserList = new List<User>();
+                using (var client = new HttpClient())
                 {
-                    var UserResponse = Res.Content.ReadAsStringAsync().Result;
-                    UserList = JsonConvert.DeserializeObject<List<User>>(UserResponse);
 
+                    client.BaseAddress = new Uri(Baseurl);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage Res = await client.GetAsync("api/Users");
+
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var UserResponse = Res.Content.ReadAsStringAsync().Result;
+                        UserList = JsonConvert.DeserializeObject<List<User>>(UserResponse);
+
+                    }
                 }
-            }
                 string Username = HttpContext.Session.GetString("username");
-
+                //Code to get the complete details of a logged in user
                 var createobj = (from k in UserList
                                  where k.UserName == Username
                                  select k).FirstOrDefault();
-                
 
                 if (createobj != null)
                 {
                     ViewBag.Message = createobj;
                 }
 
+                //Extracting the city of the user
                 var usercity = createobj.City;
-                //List<User> executives = new List<User>();
+
+                //Code to get the list of delivery executives living in the particular city of a user
                 var executives = (from j in UserList
                                   where j.City == usercity && j.UserType == "Delivery Executive"
                                   select j.UserName).ToList();
+
+                //Store the list in a ViewBag
                 ViewBag.executives = new SelectList(executives);
                 return View();
             }
+            catch(Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
+            }
             
-            [HttpPost]
+        }
+        
+
+
+        [HttpPost]
             public async Task<IActionResult> CreateBooking(DeliveryBooking p)
             {
+            try
+            {
                 DeliveryBooking Pobj = new DeliveryBooking();
-                //  HttpClient obj = new HttpClient();
                 using (var httpClient = new HttpClient())
                 {
                     string Baseurl = "https://localhost:44372/";
@@ -186,22 +254,24 @@ namespace DeliveryClient.Controllers
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         Pobj = JsonConvert.DeserializeObject<DeliveryBooking>(apiResponse);
-                        //Pobj.Price = Pobj.Weight * 30;
                     }
                 }
-                
-                                
-                   return RedirectToAction("ListByUser");
+                return RedirectToAction("ListByUser");
+            }
+            catch(Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
+            }
+                                               
+                   
             }
 
            
-
-            //[HttpPost]
-            //public async Task<IActionResult> PriceCalc(float wt)
-            //{
-            //    return await View();
-            //}
+           //Edit the booking details
             public async Task<IActionResult> EditBooking(int id)
+            {
+            try
             {
                 DeliveryBooking p = new DeliveryBooking();
                 using (var httpClient = new HttpClient())
@@ -213,13 +283,21 @@ namespace DeliveryClient.Controllers
                     }
                 }
                 return View(p);
-
             }
+            catch(Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
+            }
+            }
+
 
             [HttpPost]
             public async Task<IActionResult> EditBooking(DeliveryBooking p)
             {
-            DeliveryBooking p1 = new DeliveryBooking();
+            try
+            {
+                DeliveryBooking p1 = new DeliveryBooking();
                 using (var httpClient = new HttpClient())
                 {
                     int id = p.BookingId;
@@ -233,9 +311,19 @@ namespace DeliveryClient.Controllers
                 }
                 return RedirectToAction("GetById");
             }
+            catch(Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
+            }
+                
+            }
 
+        //Delete a booking
             [HttpGet]
             public async Task<ActionResult> DeleteBooking(int id)
+            {
+            try
             {
                 TempData["BookingId"] = id;
                 DeliveryBooking e = new DeliveryBooking();
@@ -248,11 +336,19 @@ namespace DeliveryClient.Controllers
                     }
                 }
                 return View(e);
+            }
+             catch(Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
+            }
 
             }
 
             [HttpPost]
             public async Task<ActionResult> DeleteBooking(DeliveryBooking p)
+            {
+            try
             {
                 int bkid = Convert.ToInt32(TempData["BookingId"]);
                 using (var httpClient = new HttpClient())
@@ -262,8 +358,14 @@ namespace DeliveryClient.Controllers
                         string apiResponse = await response.Content.ReadAsStringAsync();
                     }
                 }
-
-                return RedirectToAction("GetAllBookings");
+                
+            return RedirectToAction("GetAllBookings");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Invalid Operation");
+                return View();
+            }
             }
       }
 }
