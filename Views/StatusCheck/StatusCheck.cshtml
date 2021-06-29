@@ -4,31 +4,47 @@
     ViewData["Title"] = "StatusCheck";
 }
 
-@Html.Partial("_LoggedInNavBar");
-<h1>StatusCheck</h1>
 
-<h4>StatusCheck</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="StatusCheck">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="BookingId" class="control-label"></label>
-                <input asp-for="BookingId" class="form-control" />
-                <span asp-validation-for="BookingId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewBag.Data = HttpContextAccessor.HttpContext.Session.GetString("usertype");
+}
+
+
+@if (ViewBag.Data == "Customer")
+{
+    @Html.Partial("_LoggedInNavBar");
+    <h1>StatusCheck</h1>
+
+    <h4>StatusCheck</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="StatusCheck">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="BookingId" class="control-label"></label>
+                    <input asp-for="BookingId" class="form-control" />
+                    <span asp-validation-for="BookingId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="ListByUser">Back to List</a>
-</div>
+    <div>
+        <a asp-action="ListByUser" asp-controller="DeliveryBooking">Back to List</a>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+}
+else
+{
+    @Html.Partial("_NavBar")
+    <h1 style="color:red">"You are Not Authorized to View this page! Login to View"</h1>
 }

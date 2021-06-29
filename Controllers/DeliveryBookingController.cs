@@ -214,18 +214,22 @@ namespace DeliveryClient.Controllers
                 if (createobj != null)
                 {
                     ViewBag.Message = createobj;
+                    var usercity = createobj.City;
+
+                    //Code to get the list of delivery executives living in the particular city of a user
+                    var executives = (from j in UserList
+                                      where j.City == usercity && j.UserType == "Delivery Executive"
+                                      select j.UserName).ToList();
+
+                    //Store the list in a ViewBag
+                    ViewBag.executives = new SelectList(executives);
+                    
                 }
-
+                else
+                {
+                    ViewBag.ErrorMessage = "Null Exception Occured. But, it was handled.";
+                }
                 //Extracting the city of the user
-                var usercity = createobj.City;
-
-                //Code to get the list of delivery executives living in the particular city of a user
-                var executives = (from j in UserList
-                                  where j.City == usercity && j.UserType == "Delivery Executive"
-                                  select j.UserName).ToList();
-
-                //Store the list in a ViewBag
-                ViewBag.executives = new SelectList(executives);
                 return View();
             }
             catch(Exception)

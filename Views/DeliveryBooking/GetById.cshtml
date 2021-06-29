@@ -5,98 +5,113 @@
 @{
     ViewData["Title"] = "GetById";
 }
-@Html.Partial("_ExecutiveNavBar")
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewBag.Data = HttpContextAccessor.HttpContext.Session.GetString("usertype");
+}
 
-<h1 style="text-align:center">Booking Details</h1>
+@*This line of code is written to prevent Viewing the page by unauthorized people by pressing Back Button and so, only an error message will be displayed there*@
+@if (ViewBag.Data == "Delivery Executive")
+{
+    @Html.Partial("_ExecutiveNavBar")
 
-<style>
-    col-color-1 {
-        background-color: gainsboro;
-        color: blue;
-    }
+    <h1 style="text-align:center">Booking Details</h1>
 
-    .col-color-2 {
-        background-color: firebrick;
-        color: white;
-    }
-
-    tr:hover {
-        background-color: darkgrey;
-    }
-</style>
-
-
-
-<table class="table" border="1">
-    <thead border="1">
-        <tr class="col-color-2">
-            <th>
-                @Html.DisplayNameFor(model => model.BookingId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateAndTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeliveryExecutive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BookingStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td style="background-color:gainsboro">
-                    @Html.DisplayFor(modelItem => item.BookingId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateAndTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Weight)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.City)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DeliveryExecutive)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BookingStatus)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "EditBooking", new { id = item.BookingId })
-                    @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
-                </td>
-            </tr>
+    <style>
+        col-color-1 {
+            background-color: gainsboro;
+            color: blue;
         }
-    </tbody>
-</table>
+
+        .col-color-2 {
+            background-color: firebrick;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: darkgrey;
+        }
+    </style>
+
+
+
+    <table class="table" border="1">
+        <thead border="1">
+            <tr class="col-color-2">
+                <th>
+                    @Html.DisplayNameFor(model => model.BookingId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateAndTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DeliveryExecutive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BookingStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="background-color:gainsboro">
+                        @Html.DisplayFor(modelItem => item.BookingId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateAndTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Weight)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeliveryExecutive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BookingStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditBooking", new { id = item.BookingId })
+                        @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    @Html.Partial("_NavBar")
+    <h1 style="color:red">"You are Not Authorized to View this page! Login to View"</h1>
+}

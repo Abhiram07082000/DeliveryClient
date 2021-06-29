@@ -5,120 +5,131 @@
     ViewData["Title"] = "Create Booking";
     var userdata = ViewBag.Message;
     var exec = ViewBag.executives;
-
+    var error = ViewBag.ErrorMessage;
 
 }
 
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewBag.Data = HttpContextAccessor.HttpContext.Session.GetString("usertype");
+}
 
-@Html.Partial("_LoggedInNavBar");
+@*Code for handling Null exception*@
+@if (error == null)
+{
+    //This line of code is written to prevent Viewing the page by unauthorized people by pressing Back Button and so, only an error message will be displayed there
+    @if (ViewBag.Data == "Customer")
+    {
+        @Html.Partial("_LoggedInNavBar")
 
-<style>
+        <style>
 
-    .body {
-        align-content: center;
-        animation: alternate;
-        align-items: center;
-    }
+            .body {
+                align-content: center;
+                animation: alternate;
+                align-items: center;
+            }
 
-    .row-margin-30 {
-        margin-top: 4.0em;
-    }
+            .row-margin-30 {
+                margin-top: 4.0em;
+            }
 
-    .row-margin-20 {
-        margin-top: 2.0em;
-    }
+            .row-margin-20 {
+                margin-top: 2.0em;
+            }
 
-    .box {
-        background-color: aquamarine;
-        position: absolute;
-        top: 120px;
-        right: 400px;
-        bottom: 120px;
-        left: 400px;
-    }
-</style>
+            .box {
+                background-color: aquamarine;
+                position: absolute;
+                top: 120px;
+                right: 400px;
+                bottom: 120px;
+                left: 400px;
+            }
+        </style>
 
-<h1  style="text-align:center">Create a new Booking</h1>
-<div class="row">
-    <div class="col-md-4" style="width:fit-content">
-    </div>
-    
-    <div class="col-md-3">
-        <div class="row row-margin-30">
-            <div class="col-md-auto align-items-center" >
-                <form asp-action="CreateBooking">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="UserId" class="control-label"></label>
-                        <input readonly asp-for="UserId" class="form-control" value="@userdata.UserId" />
-                        <span asp-validation-for="UserId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UserName" class="control-label"></label>
-                        <input readonly asp-for="UserName" class="form-control" value="@userdata.UserName" />
-                        <span asp-validation-for="UserName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="DateAndTime" class="control-label"></label>
-                        <input asp-for="DateAndTime" class="form-control" required />
-                        <span asp-validation-for="DateAndTime" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Weight" class="control-label"></label>
-                        <input asp-for="Weight" id="input" name="weight" class="form-control" required />
-                        <span asp-validation-for="Weight" class="text-danger"></span>
+        <h1 style="text-align:center">Create a new Booking</h1>
+        <div class="row">
+            <div class="col-md-4" style="width:fit-content">
+            </div>
 
-                        @*JavaScript for Automatic Calculation of weight*@
-                        <script>
-                            function multiplyBy() {
-                                var weight = document.getElementsByName('weight')[0].value;
-                                var out = 30 * parseFloat(weight);
-                                document.getElementsByName('price')[0].value = out;
-                            }
-                        </script>
-                    </div>
-                    <div class="form-group">
-                        <input type="button" value="Calculate Price" onClick="multiplyBy()" class="btn btn-primary" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Price" class="control-label"></label>
-                        <input readonly type="text" asp-for="Price" color="black" name="price" class="form-control" />
-                        <span asp-validation-for="Price" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Address" class="control-label"></label>
-                        <input readonly asp-for="Address" class="form-control" value="@userdata.Address" />
-                        <span asp-validation-for="Address" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="City" class="control-label"></label>
-                        <input readonly asp-for="City" class="form-control" value="@userdata.City" />
-                        <span asp-validation-for="City" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="DeliveryExecutive" class="control-label"></label>
-                        <select asp-for="DeliveryExecutive" class="form-control" asp-items="@exec"></select>
-                        <span asp-validation-for="DeliveryExecutive" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label hidden asp-for="BookingStatus" type="hidden" class="control-label"></label>
-                        <input hidden asp-for="BookingStatus" class="form-control" value="Waiting for Executive Confirmation" />
-                        <span hidden asp-validation-for="BookingStatus" type="hidden" class="text-danger"></span>
-                    </div>
+            <div class="col-md-3">
+                <div class="row row-margin-30">
+                    <div class="col-md-auto align-items-center">
+                        <form asp-action="CreateBooking">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="UserId" class="control-label"></label>
+                                <input readonly asp-for="UserId" class="form-control" value="@userdata.UserId" />
+                                <span asp-validation-for="UserId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UserName" class="control-label"></label>
+                                <input readonly asp-for="UserName" class="form-control" value="@userdata.UserName" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DateAndTime" class="control-label"></label>
+                                <input asp-for="DateAndTime" class="form-control" required />
+                                <span asp-validation-for="DateAndTime" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Weight" class="control-label"></label>
+                                <input asp-for="Weight" id="input" name="weight" class="form-control" required />
+                                <span asp-validation-for="Weight" class="text-danger"></span>
 
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
+                                @*JavaScript for Automatic Calculation of weight*@
+                                <script>
+                                    function multiplyBy() {
+                                        var weight = document.getElementsByName('weight')[0].value;
+                                        var out = 30 * parseFloat(weight);
+                                        document.getElementsByName('price')[0].value = out;
+                                    }
+                                </script>
+                            </div>
+                            <div class="form-group">
+                                <input type="button" value="Calculate Price" onClick="multiplyBy()" class="btn btn-primary" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Price" class="control-label"></label>
+                                <input readonly type="text" asp-for="Price" color="black" name="price" class="form-control" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Address" class="control-label"></label>
+                                <input readonly asp-for="Address" class="form-control" value="@userdata.Address" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="City" class="control-label"></label>
+                                <input readonly asp-for="City" class="form-control" value="@userdata.City" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DeliveryExecutive" class="control-label"></label>
+                                <select asp-for="DeliveryExecutive" class="form-control" asp-items="@exec"></select>
+                                <span asp-validation-for="DeliveryExecutive" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label hidden asp-for="BookingStatus" type="hidden" class="control-label"></label>
+                                <input hidden asp-for="BookingStatus" class="form-control" value="Waiting for Executive Confirmation" />
+                                <span hidden asp-validation-for="BookingStatus" type="hidden" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
+            </div>
+
+            <div class="col-md-3">
             </div>
         </div>
-    </div>
-   
-    <div class="col-md-3">
-    </div>
-</div>
-        
-        
+
+
         <div>
             @ViewBag.exception
         </div>
@@ -129,4 +140,15 @@
 
         @section Scripts {
             @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}}
+    }
 
+    else
+    {
+        @Html.Partial("_NavBar")
+        <h1 style="color:red">"You are Not Authorized to View this page! Login to View"</h1>
+    }
+}
+else
+{
+    <h1>@error</h1>
+}

@@ -21,7 +21,7 @@ namespace DeliveryClient.Models
         [Display(Name = "Enter the Date and Time")]
         public DateTime DateAndTime { get; set; }
         
-        [Display(Name = "Enter the Weight")]
+        [Display(Name = "Enter the Weight(in Kgs)")]
         public float Weight { get; set; }
         public string Address { get; set; }
         public string City { get; set; }

@@ -4,74 +4,87 @@
     ViewData["Title"] = "Edit";
 }
 
-@Html.Partial("_ExecutiveNavBar")
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewBag.Data = HttpContextAccessor.HttpContext.Session.GetString("usertype");
+}
 
 
-<h1 style="text-align:center">Edit a Booking</h1>
+@*This line of code is written to prevent Viewing the page by unauthorized people by pressing Back Button and so, only an error message will be displayed there*@
+@if (ViewBag.Data == "Delivery Executive")
+{
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditBooking">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="BookingId" class="control-label"></label>
-                <input readonly asp-for="BookingId" class="form-control" />
-                <span asp-validation-for="BookingId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input readonly asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateAndTime" class="control-label"></label>
-                <input readonly asp-for="DateAndTime" class="form-control" />
-                <span asp-validation-for="DateAndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Weight" class="control-label"></label>
-                <input readonly asp-for="Weight" class="form-control" />
-                <span asp-validation-for="Weight" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input readonly asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input readonly asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeliveryExecutive" class="control-label"></label>
-                <input readonly asp-for="DeliveryExecutive" class="form-control" />
-                <span asp-validation-for="DeliveryExecutive" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BookingStatus" class="control-label"></label>
-                <select asp-for="BookingStatus" class="form-control">
-                    <option value="Accepted" style="color:limegreen">Accepted</option>
-                    <option value="Yet to Ship" style="color:royalblue">Yet to Ship</option>
-                    <option value="Shipped" style="color:orange">Shipped</option>
-                    <option value="Rejected" style="color:red">Rejected</option>
-                </select>
-                <span asp-validation-for="BookingStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input readonly asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    @Html.Partial("_ExecutiveNavBar")
+    <h1 style="text-align:center">Edit a Booking</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditBooking">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="BookingId" class="control-label"></label>
+                    <input readonly asp-for="BookingId" class="form-control" />
+                    <span asp-validation-for="BookingId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input readonly asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DateAndTime" class="control-label"></label>
+                    <input readonly asp-for="DateAndTime" class="form-control" />
+                    <span asp-validation-for="DateAndTime" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Weight" class="control-label"></label>
+                    <input readonly asp-for="Weight" class="form-control" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label"></label>
+                    <input readonly asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input readonly asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DeliveryExecutive" class="control-label"></label>
+                    <input readonly asp-for="DeliveryExecutive" class="form-control" />
+                    <span asp-validation-for="DeliveryExecutive" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BookingStatus" class="control-label"></label>
+                    <select asp-for="BookingStatus" class="form-control">
+                        <option value="Accepted" style="color:limegreen">Accepted</option>
+                        <option value="Yet to Ship" style="color:royalblue">Yet to Ship</option>
+                        <option value="Shipped" style="color:orange">Shipped</option>
+                        <option value="Rejected" style="color:red">Rejected</option>
+                    </select>
+                    <span asp-validation-for="BookingStatus" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input readonly asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+}
+else
+{
+    @Html.Partial("_NavBar")
+    <h1 style="color:red">"You are Not Authorized to View this page! Login to View"</h1>
 }

@@ -27,11 +27,12 @@ namespace DeliveryClient.Models
         [DataType(DataType.Password)]
         [StringLength(15, ErrorMessage = "Please Enter 8 - 15 characters", MinimumLength = 8)]
         [Display(Name = "Password")]
-        [RegularExpression(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).*$", ErrorMessage = "Enter atleast one Character,number and letters")]
+        [RegularExpression(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).*$", ErrorMessage = "Password must have an Uppercase, Lowercase,Special character and a number")]
         [Required(ErrorMessage = "{0} is required")]
         public string Password { get; set; }
         
         [Required]
+        [RegularExpression(@"^[+]?([0-9]+(?:[\.][1-9]*)?|\.[1-9]+)$", ErrorMessage = "Enter a Positive Number")]
         public int Age { get; set; }
 
         [DataType(DataType.PhoneNumber)]

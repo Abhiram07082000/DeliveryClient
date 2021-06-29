@@ -3,11 +3,18 @@
 @{
     ViewData["Title"] = "StatusCheck";
 }
-
-@Html.Partial("_LoggedInNavBar")
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
-    if (@ViewBag.errormsg != null)
+    ViewBag.Data = HttpContextAccessor.HttpContext.Session.GetString("usertype");
+}
+
+
+@if (ViewBag.Data == "Customer")
+{
+    @Html.Partial("_LoggedInNavBar")
+
+@if (@ViewBag.errormsg != null)
     {
         <script type="text/javascript">
 
@@ -17,7 +24,7 @@
                 };
         </script>
     }
-}
+
 <h1>StatusCheck</h1>
 
 
@@ -34,11 +41,11 @@
             @Html.DisplayFor(model => model.BookingId)
         </dd>
         @*<dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>*@
+                @Html.DisplayNameFor(model => model.UserId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UserId)
+            </dd>*@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UserName)
         </dt>
@@ -91,6 +98,12 @@
 
 </div>
 <div>
- 
+
     <a asp-action="StatusCheck" asp-controller="StatusCheck">Back</a>
 </div>
+    }
+    else
+    {
+@Html.Partial("_NavBar")
+<h1 style="color:red">"You are Not Authorized to View this page! Login to View"</h1>
+}

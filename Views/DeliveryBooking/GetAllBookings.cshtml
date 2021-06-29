@@ -3,114 +3,115 @@
 @{
     ViewData["Title"] = "GetAllBookings";
 }
-@Html.Partial("_AdminNavBar")
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewBag.Data = HttpContextAccessor.HttpContext.Session.GetString("usertype");
+}
 
-<style>
-    col-color-1 {
-        background-color: gainsboro;
-        color: blue;
-    }
+@*This line of code is written to prevent Viewing the page by unauthorized people by pressing Back Button and so, only an error message will be displayed there*@
+@if (ViewBag.Data == "Admin")
+{
+    @Html.Partial("_AdminNavBar")
 
-    .col-color-2 {
-        background-color: firebrick;
-        color: white;
-    }
-
-    tr:hover {
-        background-color: darkgrey;
-    }
-</style>
-<h1 style="text-align:center">List of All Bookings</h1>
-
-<p>
-    <a asp-action="CreateBooking">Create New</a>
-</p>
-<table class="table" border="1">
-    <thead border="1">
-        <tr class="col-color-2">
-            <th>
-                @Html.DisplayNameFor(model => model.BookingId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.DateAndTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeliveryExecutive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BookingStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td style="background-color:gainsboro">
-                    @Html.DisplayFor(modelItem => item.BookingId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateAndTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Weight)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.City)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DeliveryExecutive)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BookingStatus)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "EditBooking", new { id = item.BookingId }) |
-                   
-                    @Html.ActionLink("Delete", "DeleteBooking", new { id = item.BookingId })
-                </td>
-            </tr>
+    <style>
+        col-color-1 {
+            background-color: gainsboro;
+            color: blue;
         }
-    </tbody>
-</table>
 
+        .col-color-2 {
+            background-color: firebrick;
+            color: white;
+        }
 
-@*<div class="form-group">
-    <label for="">Weight (b): </label><input type="textbox" asp-for="Weight" name="weight"></input><br>
-    <button onClick="calculateArea()">Calculate area</button><br>
-    <label asp-for="Price">Price</label><input type="textbox" asp-for="Price" name="price"></input>
-    <script>
-                            function calculateArea() {
-                                var base = document.getElementsByName('weight')[0].value;
-                                var out = 2 * parseFloat(base);
-                                document.getElementsByName('price')[0].value = out;
+        tr:hover {
+            background-color: darkgrey;
+        }
+    </style>
+    <h1 style="text-align:center">List of All Bookings</h1>
 
-                            }
-    </script>
-</div>*@
+    <p>
+        <a asp-action="CreateBooking">Create New</a>
+    </p>
+    <table class="table" border="1">
+        <thead border="1">
+            <tr class="col-color-2">
+                <th>
+                    @Html.DisplayNameFor(model => model.BookingId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.DateAndTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DeliveryExecutive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BookingStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="background-color:gainsboro">
+                        @Html.DisplayFor(modelItem => item.BookingId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateAndTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Weight)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeliveryExecutive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BookingStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditBooking", new { id = item.BookingId }) |
+
+                        @Html.ActionLink("Delete", "DeleteBooking", new { id = item.BookingId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+else
+{
+    @Html.Partial("_NavBar")
+    <h1 style="color:red">"You are Not Authorized to View this page! Login to View"</h1>
+}
